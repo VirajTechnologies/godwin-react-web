@@ -1,0 +1,59 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Prepare upload folder
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: mkdir -p /home/u130520044/domains/godwin.co.in/deploy-tmp
+
+      - name: Upload build
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "dist/index.html,dist/assets,dist/images"
+          target: "/home/u130520044/domains/godwin.co.in/deploy-tmp"
+          strip_components: 1
+          rm: true
+
+      - name: Publish build
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            cd /home/u130520044/domains/godwin.co.in
+            test -f deploy-tmp/index.html
+            test -d deploy-tmp/assets
+            test -d deploy-tmp/images
+            rm -rf public_html/assets public_html/images
+            cp deploy-tmp/index.html public_html/index.html
+            mv deploy-tmp/assets public_html/assets
+            mv deploy-tmp/images public_html/images
+            rm -rf deploy-tmp
