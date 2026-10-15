@@ -39,7 +39,7 @@ export function OrganizationPage() {
       <AboutHero title="Our Organization" />
       <main id="main-content" tabIndex="-1" className="organization-page content-width">
         <h2>Our Organization Chart</h2>
-        <div className="chart-scroll organization-chart-scroll" role="region" aria-label="Organization chart. Scroll horizontally to read the full chart." tabIndex="0">
+        <div className="chart-scroll organization-chart-scroll" role="region" aria-label="Organization chart, scaled to fit the available screen width">
           <img src="/images/organization-chart.jpg" alt="Godwin organization chart: Chairman, MD and CEO, six group divisions, and four supporting departments" />
         </div>
       </main>
@@ -52,7 +52,7 @@ export function FlowchartPage() {
     <>
       <AboutHero title="Godwin Flowchart" />
       <main id="main-content" tabIndex="-1" className="flowchart-page">
-        <div className="chart-scroll flowchart-scroll" role="region" aria-label="Group flowchart. Scroll horizontally to read the full chart." tabIndex="0">
+        <div className="chart-scroll flowchart-scroll" role="region" aria-label="Group flowchart, scaled to fit the available screen width">
           <img src="/images/group-flowchart.jpg" alt="Godwin Groups flowchart showing its divisions, industries, and services" />
         </div>
         <p className="flowchart-caption">ESTABLISHED BY "IIT" PROFESSIONALS</p>
